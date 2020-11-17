@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+      convert -f docker-compose.jetblue.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: notifying-backgroundtasks
+  name: notifying-backgroundtasks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notifying-backgroundtasks
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+          convert -f docker-compose.jetblue.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: notifying-backgroundtasks
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: CheckUpdateTime
+          value: "30000"
+        - name: DelaySendMessageTime
+          value: "30"
+        - name: EventBusConnection
+          value: 192.168.8.56
+        - name: EventBusPassword
+        - name: EventBusUserName
+        - name: EventBusVirtualHost
+        - name: MongoConnectionString
+          value: mongodb://nosqldata
+        - name: MongoDatabase
+          value: NotificationsDB
+        - name: Serilog__MinimumLevel__Override__BuildingBlocks.EventBusRabbitMQ
+          value: Verbose
+        - name: SubscriberConnectionString
+          value: Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word
+        - name: UseCustomizationData
+          value: "True"
+        image: notifying-backgroundtasks
+        imagePullPolicy: ""
+        name: notifying-backgroundtasks
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

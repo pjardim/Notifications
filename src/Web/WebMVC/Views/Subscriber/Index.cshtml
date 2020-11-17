@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Subscribing.Application.Queries.ViewModels.SubscriberViewModel>
+
+@{
+    ViewData["Title"] = "Subscribers";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "Subscriber", Text = "Subscriber" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Subscribers</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Subscribers</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Subscriber</h5>
+                    <div class="ibox-tools">
+                        <a class="btn btn-primary btn-xs" asp-controller="Subscriber" asp-action="Create">Create</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SubscriberPartyId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubscriberPartyId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    <div class="tooltip-helper">
+                                        <a class="btn btn-primary btn-sm" asp-controller="Subscriber" asp-action="Details" asp-route-id="@item.SubscriberPartyId">Details</a>
+                                        <a class="btn btn-white btn-sm" asp-controller="Subscriber" asp-action="Edit" asp-route-id="@item.SubscriberPartyId">Edit</a>
+                                        <a class="btn btn-white btn-sm" asp-controller="Subscriber" asp-action="Delete" asp-route-id="@item.SubscriberPartyId">Delete</a>
+                                        <a class="btn btn-success btn-circle float-right" data-toggle="tooltip" data-placement="top" title="Settings" asp-controller="SubscriberApplicationEvent" asp-action="Index" asp-route-partyId="@item.SubscriberPartyId"><i class="fa fa-cogs"></i></a>
+                                        <a class="btn btn-primary btn-circle float-right" data-toggle="tooltip" data-placement="top" title="Edit Groups" asp-controller="SubscriberGroup" asp-action="Index" asp-route-partyId="@item.SubscriberPartyId"><i class="fa fa-list-ul"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+
+}

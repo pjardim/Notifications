@@ -1,0 +1,198 @@
+version: '3.4'
+
+# The default docker-compose.override file can use the "localhost" as the external name for testing web apps within the same dev machine.
+# The NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP environment variable is taken, by default, from the ".env" file defined like:
+#     NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP=localhost
+# but values present in the environment vars at runtime will always override those defined inside the .env file
+# An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
+
+services:  
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"  # Important: In a production environment your should remove the external port
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"  # Important: In a production environment your should remove the external port
+ 
+  nosqldata:
+    container_name: nosqldata
+    image: mongo
+    volumes:
+      - notifications-nosqldata:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_DATABASE=auth
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - '27017:27017'
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    depends_on:
+      - nosqldata
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
+      - ME_CONFIG_MONGODB_SERVER=nosqldata
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    ports:
+      - '8081:8081'
+
+  sqldata:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"   # Important: In a production environment your should remove the external port
+    volumes:
+      - notification-sqldata:/var/opt/mssql
+
+  nosqldata:
+    ports:
+      - "27017:27017"  # Important: In a production environment your should remove the external port
+
+  eventstore:
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_EXT_TCP_PORT=1113
+      - EVENTSTORE_EXT_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    ports:
+      - "1113:1113"
+      - "2113:2113"
+    volumes:
+      - notification-eventstore:/var/opt/eventstore
+    
+  identity-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80      
+      - ConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.IdentityDb;User Id=sa;Password=Pass@word}
+      - MvcClient=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5100     
+      - NotifyingApiClient=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5104 
+      - SignalrHubClient=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5112 
+      - UseCustomizationData=True
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5105:80"
+
+  publishing-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development        
+      - EventBusPassword=${NOT_SERVICE_BUS_PASSWORD}
+      - EventBusConnection=${NOT_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${NOT_SERVICE_BUS_USERNAME}  
+      - EventBusVirtualHost=${NOT_SERVICE_BUS_BROKER}       
+      - ConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.NotificationDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true}
+      - EventStoreConnection=${NOT_AZURE_SERVICE_BUS:-ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500; VerboseLogging=true}
+      - SubscriberConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true}
+      - AzureServiceBusEnabled=False    
+      - PORT=80
+      - PATH_BASE=/publishing-api
+    ports:
+      - "5103:80"
+      - "9103:81"
+      
+  notifying-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development     
+      - EventBusUserName=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${NOT_SERVICE_BUS_PASSWORD} 
+      - EventBusVirtualHost=${NOT_SERVICE_BUS_BROKER} 
+      - MongoConnectionString=${NOT_AZURE_COSMOSDB:-mongodb://nosqldata}
+      - MongoDatabase=NotificationsDB
+      - EventStoreConnection=${NOT_AZURE_SERVICE_BUS:-ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500; VerboseLogging=true}
+      - SubscriberConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true}
+      - identityUrl=http://identity-api
+      - SubscribingUrl=http://webmvc
+      - IdentityUrlExternal=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=${NOT_AZURE_SERVICE_BUS:-rabbitmq}
+
+      - PORT=80
+      - PATH_BASE=/notifying-api
+    ports:
+      - "5104:80"
+      - "9104:81"
+
+
+  notifying-backgroundtasks:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - MongoConnectionString=${NOT_AZURE_COSMOSDB:-mongodb://nosqldata}
+      - MongoDatabase=NotificationsDB
+      - SubscriberConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word}
+      - EventBusConnection=${NOT_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${NOT_SERVICE_BUS_PASSWORD}
+      - EventBusVirtualHost=${NOT_SERVICE_BUS_BROKER} 
+      - UseCustomizationData=True     
+      - CheckUpdateTime=30000
+      - DelaySendMessageTime=30
+      - Serilog__MinimumLevel__Override__BuildingBlocks.EventBusRabbitMQ=Verbose
+    ports:
+      - "5111:80"
+
+  webmvc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=${NOT_AZURE_IDENTITY_DB:-Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word}
+      - ASPNETCORE_URLS=http://0.0.0.0:80    
+      - EventBusConnection=${NOT_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusVirtualHost=${NOT_SERVICE_BUS_BROKER} 
+      - EventStoreConnection=${NOT_AZURE_SERVICE_BUS:-ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500; VerboseLogging=true}
+      - IdentityUrl=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - NotifyingURL=http://notifying-api
+      - IdentityUrlHC=http://identity-api/hc   
+      - SignalrHubUrl=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5112
+
+    ports:
+      - "5100:80"
+
+  subscribing-signalrhub:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - EventBusConnection=${NOT_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${NOT_SERVICE_BUS_USERNAME}
+      - EventBusVirtualHost=${NOT_SERVICE_BUS_BROKER} 
+      - SubscribingUrl=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5100
+      - IdentityUrl=http://${NOTIFICATIONS_EXTERNAL_DNS_NAME_OR_IP}:5105
+    ports:
+      - "5112:80"
+
+
+  webstatus:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - HealthChecksUI__HealthChecks__0__Name=WebMVC HTTP Check
+      - HealthChecksUI__HealthChecks__0__Uri=http://webmvc/hc
+      - HealthChecksUI__HealthChecks__1__Name=Identity HTTP Check
+      - HealthChecksUI__HealthChecks__1__Uri=http://identity-api/hc
+      - HealthChecksUI__HealthChecks__2__Name=Notifying HTTP Check
+      - HealthChecksUI__HealthChecks__2__Uri=http://notifying-api/hc
+      - HealthChecksUI__HealthChecks__3__Name=Notifying HTTP Background Check
+      - HealthChecksUI__HealthChecks__3__Uri=http://notifying-backgroundtasks/hc
+    ports:
+      - "5107:80"   
+
+volumes:
+  notification-sqldata:
+    external: false
+  notification-eventstore:
+    external: false

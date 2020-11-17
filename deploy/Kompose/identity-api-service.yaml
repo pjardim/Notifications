@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+      convert -f docker-compose.jetblue.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: identity-api
+  name: identity-api
+spec:
+  ports:
+  - name: "5105"
+    port: 5105
+    targetPort: 80
+  selector:
+    io.kompose.service: identity-api
+status:
+  loadBalancer: {}

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+      convert -f docker-compose.jetblue.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: identity-api
+  name: identity-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: identity-api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+          convert -f docker-compose.jetblue.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: identity-api
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: ApplicationInsights__InstrumentationKey
+        - name: ConnectionString
+          value: Server=sqldata;Database=Notifications.IdentityDb;User Id=sa;Password=Pass@word
+        - name: MvcClient
+          value: http://:5100
+        - name: NotifyingApiClient
+          value: http://:5104
+        - name: OrchestratorType
+        - name: SignalrHubClient
+          value: http://:5112
+        - name: UseCustomizationData
+          value: "True"
+        image: identity-api
+        imagePullPolicy: ""
+        name: identity-api
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

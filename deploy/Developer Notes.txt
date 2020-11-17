@@ -1,0 +1,3 @@
+The documentation is based on eShopOncontainers "https://github.com/dotnet-architecture/eShopOnContainers"
+
+The Notifications fallow the same architecture and could be deployed in the same way.

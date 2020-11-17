@@ -1,0 +1,208 @@
+﻿@model Subscribing.Application.Queries.ViewModels.ApplicationEventChannelTemplateViewModel
+
+@{
+    ViewData["Title"] = "Create NotificationTemplate";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "NotificationTemplate", Text = "Notification Template" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Edit Notification Template by Channel</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Index</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-primary" asp-controller="ApplicationEvent" asp-action="Index" asp-route-applicationEventId="@Model.ApplicationEventId">Back To List</a>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <form method="get" role="form" asp-controller="ApplicationEventChannelTemplate" asp-action="Index">
+                    <input type="hidden" asp-for="@Model.ApplicationEventId" name="applicationEventId" />
+
+                    <div class="form-group row">
+                        <label asp-for="ApplicationEvent" class="col-lg-2 col-form-label">Application Event</label>
+                        <div class="col-lg-5">
+                            @Html.DisplayFor(modelItem => modelItem.ApplicationEvent.ApplicationEventName)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Channel" class="col-lg-2 col-form-label">Channel</label>
+                        <div class="col-lg-5">
+                            <select asp-for="@Model.ChannelId" asp-items="@Model.ChannelsList" onchange="changeChannel();" placeholder="" class="form-control subscriberFilterSelect"></select>
+                            <span asp-validation-for="ChannelId" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Subject" class="col-lg-2 col-form-label">Subject</label>
+                        <div class="col-lg-5">
+                            <input asp-for="Subject" type="text" placeholder="Subject" class="form-control" />
+                            <span asp-validation-for="Subject" class="text-danger" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox ">
+
+                                <div class="ibox-content">
+
+                                    <h2>
+                                        Usage
+                                    </h2>
+                                    <p>
+                                        The template will render the parameter value of the paramter name.
+                                    </p>
+                                    <pre>
+                                    Dear {{CrewName}}  
+                                    </pre>
+                                    <h4>
+                                        Available parameters from this application event are:
+                                    </h4>
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>
+                                                Paramter Name
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+
+                                        </tr>
+
+                                        @foreach (var item in Model.ApplicationEvent.ApplicationEventParameters)
+                                        {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelitemItem => item.ParameterName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelitemItem => item.Description)
+                                            </td>
+                                        </tr>
+                                        }
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ibox-title">
+                        <h5>Template Editor</h5>
+                        <button id="edit" class="btn btn-primary btn-xs m-l-sm" type="button">Edit</button>
+                        <button id="save" class="btn btn-primary  btn-xs" type="button">Save</button>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content no-padding">
+
+                        <div class="templateEditor wrapper p-md">
+                            @Html.Raw(@Model.Body)
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/summernote/summernote-bs4.css" />
+        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+    </environment>
+
+}
+
+@section Scripts {
+    <environment names="Development">
+        <script src="~/lib/sweetalert/dist/sweetalert-dev.js"></script>
+    </environment>
+
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/summernote/summernote-bs4.js"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+
+        $("#edit").click(function () {
+            $('.templateEditor').summernote({ focus: true });
+        });
+
+        $("#save").click(function(){
+            var markup = $('.templateEditor').summernote('code');
+            saveTemplate(markup);
+             $('.templateEditor').summernote('destroy');
+        });
+
+        function changeChannel() {
+            swal({
+                    title: "All unsaved changes will be lost!",
+                    text: "do you want change it anyway?",
+                    type: "warning",
+                    confirmButtonColor: "#5bc0de",
+                    //  confirmButton: "btn btn-info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, discart changes!",
+                    closeOnConfirm: true
+                },
+                function() {
+                     $('form').submit();
+                });
+              };
+
+        function saveTemplate(body) {
+            var selectedChannelId = $("#ChannelId").val();
+            var subject  = $("#Subject").val();
+            $.ajax({
+                url: '/ApplicationEventChannelTemplate/SaveTemplate',
+                datatype: "Json",
+                type: "Post",
+                data: { applicationEventId : '@Model.ApplicationEvent.Id', channelId: selectedChannelId, subject, body },
+                contenttype: 'application/json; charset=utf-8',
+                async: true,
+                success: function (response) {
+                    if (response.result) {
+                        swal("Success!", response.responseText, "success");
+
+                    } else {
+                       swal("Error",response.responseText,"error" );
+                    }
+                },
+                error: function (data) {
+                 swal("Error!", "Failed to save the template", "error");
+                }
+            });
+        };
+    </script>
+}

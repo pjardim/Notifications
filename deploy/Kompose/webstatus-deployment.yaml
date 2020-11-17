@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+      convert -f docker-compose.jetblue.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webstatus
+  name: webstatus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: webstatus
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+          convert -f docker-compose.jetblue.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webstatus
+    spec:
+      containers:
+      - env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://0.0.0.0:80
+        - name: HealthChecksUI__HealthChecks__0__Name
+          value: WebMVC HTTP Check
+        - name: HealthChecksUI__HealthChecks__0__Uri
+          value: http://webmvc/hc
+        - name: HealthChecksUI__HealthChecks__1__Name
+          value: Identity HTTP Check
+        - name: HealthChecksUI__HealthChecks__1__Uri
+          value: http://identity-api/hc
+        - name: HealthChecksUI__HealthChecks__2__Name
+          value: Notifying HTTP Check
+        - name: HealthChecksUI__HealthChecks__2__Uri
+          value: http://notifying-api/hc
+        - name: HealthChecksUI__HealthChecks__3__Name
+          value: Notifying HTTP Background Check
+        - name: HealthChecksUI__HealthChecks__3__Uri
+          value: http://notifying-backgroundtasks/hc
+        image: webstatus
+        imagePullPolicy: ""
+        name: webstatus
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

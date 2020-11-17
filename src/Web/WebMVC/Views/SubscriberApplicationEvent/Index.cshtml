@@ -1,0 +1,139 @@
+﻿@model WebMVC.ViewModels.SubscriberApplicationEventSettingsViewModel
+
+@{
+    ViewData["Title"] = "Subscriber Settings";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "SubscriberApplicationEvent", Text = "Configurations" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Application Event Settings</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Application Event Settings</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-primary" asp-controller="SubscriberApplicationEvent" asp-action="Index" asp-route-partyId="@Model.Subscriber.SubscriberPartyId">Back To List</a>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Edit Application Event Settings</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="post" role="form" asp-controller="SubscriberApplicationEvent" asp-action="Save">
+
+                        <div class="form-group row">
+                            <label asp-for="Subscriber" class="col-lg-2 col-form-label">User</label>
+                            <div class="col-lg-2">
+                                @Html.DisplayFor(modelItem => modelItem.Subscriber.Name)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label class="col-form-label">Application Event</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="col-form-label">Channel</label>
+                            </div>
+                        </div>
+                        @for (var i = 0; i < Model.SubscriberApplicationEvents.Count; i++)
+                        {
+                            @Html.HiddenFor(model => Model.SubscriberApplicationEvents[i].ApplicationEventId)
+                            @Html.HiddenFor(model => Model.SubscriberApplicationEvents[i].SubscriberPartyId)
+
+                            <div class="form-group row">
+                                <div class="col-lg-2">
+                                    <input asp-for="@Model.SubscriberApplicationEvents[i].ApplicationEvent.ApplicationEventName" disabled type="text" class="form-control" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <select asp-for="@Model.SubscriberApplicationEvents[i].ChannelId" asp-items="@Model.ChannelsList" placeholder="" class="form-control channelSelectList"></select>
+                                </div>
+                            </div>
+                        }
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <a class="btn btn-white btn-sm" asp-controller="Subscriber" asp-action="Index">Cancel</a>
+                                <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/summernote/summernote-bs4.css" />
+        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+        <link rel="stylesheet" href="~/lib/iCheck/custom.css" />
+        <link rel="stylesheet" href="~/lib/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2-bootstrap4.min.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    </environment>
+
+
+}
+
+@section Scripts {
+
+
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/summernote/summernote-bs4.js"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="~/lib/iCheck/icheck.min.js"></script>
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $(".channelSelectList").select2({
+                theme: 'bootstrap4',
+                allowClear: false
+            });
+
+        });
+
+        function changeChannel() {
+            swal({
+                title: "All unsaved changes will be lost!",
+                text: "do you want change it anyway?",
+                type: "warning",
+                confirmButtonColor: "#5bc0de",
+                //  confirmButton: "btn btn-info",
+                showCancelButton: true,
+                confirmButtonText: "Yes, discart changes!",
+                closeOnConfirm: true
+            },
+                function () {
+                    $('form').submit();
+                });
+        };
+    </script>
+}

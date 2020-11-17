@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WebMVC.ViewModels
+@using WebMVC.Services
+
+@inject IIdentityParser<ApplicationUser> UserManager
+
+<style>
+    #avatar {
+        max-width: 55%;
+        max-height: 55%;
+    }
+</style>
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <img alt="image" id="avatar" class="rounded-circle avatar" src="~/images/DefaultAvatar.png" />
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="block m-t-xs font-bold">@User.FindFirst(x => x.Type == "name").Value</span>
+                        <span class="text-muted text-xs block"><b class="caret"></b></span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs" style="position: absolute;top: 91px;left: 0px;will-change: top, left;   ">
+
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="@Url.Action("Signout", "Account")">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                   Rainmaker
+                </div>
+            </li>
+            <li class="@Html.IsSelected(controller: "Settings")">
+                <a href="@Url.Action("Index", "ApplicationEvent")"><i class="fa fa-edit"></i> <span class="nav-label" data-i18n="nav.settings">Settings</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Dashboards", cssClass: "in")">
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "ApplicationEvent")">Application Events</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Subscriber")">Subscribers</a></li>
+                </ul>
+            </li>
+            <li class="@Html.IsSelected(controller: "Mailbox")">
+                <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label" data-i18n="nav.mailbox">Mailbox </span><span class="label label-warning float-right">16/24</span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Mailbox", cssClass: "in")">
+                    <li class="@Html.IsSelected(action: "Inbox")"><a href="@Url.Action("Inbox", "Mailbox")">Inbox</a></li>
+                    <li class="@Html.IsSelected(action: "ComposeEmail")"><a href="@Url.Action("ComposeEmail", "Mailbox")">Compose email</a></li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

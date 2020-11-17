@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Subscribing.Application.Queries.ViewModels.ApplicationEventViewModel>
+
+@{
+    ViewData["Title"] = "Application Events";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "ApplicationEvent", Text = "Application Event" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Application Events</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Application Events</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Application Event</h5>
+                    <div class="ibox-tools">
+                        <a class="btn btn-primary btn-xs" asp-controller="ApplicationEvent" asp-action="Create">Create</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ApplicationEventName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SubscriberFilters)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationEventName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+
+                                <td>
+                                    <div class="tooltip-helper">
+                                        <a class="btn btn-primary btn-sm" asp-controller="ApplicationEvent" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        <a class="btn btn-white btn-sm" asp-controller="ApplicationEvent" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a class="btn btn-white btn-sm" asp-controller="ApplicationEvent" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        <a class="btn btn-primary btn-circle float-right" data-toggle="tooltip" data-placement="top" title="Edit Parameters" asp-controller="ApplicationEventParameter" asp-action="Index" asp-route-applicationEventId="@item.Id"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-success btn-circle float-right" data-toggle="tooltip" data-placement="top" title="Edit Templates" asp-controller="ApplicationEventChannelTemplate" asp-action="Index" asp-route-applicationEventId="@item.Id"><i class="fa fa-envelope"></i></a>
+                                        <a class="btn btn-info btn-circle float-right" data-toggle="tooltip" data-placement="top" title="Settings" asp-controller="ApplicationEventChannel" asp-action="Index" asp-route-applicationEventId="@item.Id"><i class="fa fa-cogs"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+
+}

@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Views/Mailbox/_MailLayout.cshtml";
+}
+
+@model Subscribing.Application.Queries.ViewModels.MailBoxItemViewModel
+
+@{
+    ViewData["Title"] = "EmailView";
+}
+
+<div class="mail-box-header">
+    <div class="float-right tooltip-demo">
+        <a href="@Url.Action("ComposeEmail", "Mailbox")" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> Reply</a>
+        <a href="#" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Print email"><i class="fa fa-print"></i> </a>
+        <a href="@Url.Action("Inbox", "Mailbox")" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </a>
+    </div>
+    <h2>
+        View Message
+    </h2>
+    <div class="mail-tools tooltip-demo m-t-md">
+        <h3>
+            <span class="font-normal">Subject: </span>@Model.Subject
+        </h3>
+        <h5>
+            <span class="float-right font-normal">@Model.CreatedDate</span>
+            <span class="font-normal">From: </span>@String.Join(",", @Model.Senders.Select(x => x.Name))
+        </h5>
+    </div>
+</div>
+<div class="mail-box">
+    <div class="mail-body">
+        @Html.Raw(@Model.Body)
+    </div>
+
+    <div class="clearfix"></div>
+</div>

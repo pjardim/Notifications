@@ -1,0 +1,99 @@
+version: '3.4'
+
+
+services:
+
+  seq:
+    image: datalust/seq:latest
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2017-latest 
+
+  nosqldata:
+    image: mongo
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - nosqldata    
+ 
+  eventstore:
+    image: eventstore/eventstore
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine  
+
+
+  identity-api:  
+    image: ${REGISTRY:-notficationsystem}/identity.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+    depends_on:
+      - sqldata      
+
+  publishing-api:
+    image: ${REGISTRY:-notficationsystem}/publishing-api:${PLATFORM:-linux}-${TAG:-latest}
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: Services/Publishing/Publishing.API/Dockerfile  
+      
+  notifying-api:  
+    image: ${REGISTRY:-notficationsystem}/notifying-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Notifying/Notifying.API/Dockerfile
+    depends_on:
+      - rabbitmq
+      - nosqldata
+      - sqldata
+      - identity-api
+      - eventstore
+
+  webmvc:
+    image: ${REGISTRY:-notficationsystem}/webmvc:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebMVC/Dockerfile
+    depends_on:
+      - publishing-api
+      - identity-api
+      - sqldata
+      - eventstore
+      - rabbitmq
+    
+  notifying-backgroundtasks:  
+    image: ${REGISTRY:-notficationsystem}/notifying-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Notifying/Notifying.BackgroundTasks/Dockerfile
+    depends_on:
+      - nosqldata
+      - rabbitmq
+
+  subscribing-signalrhub:
+    image: ${REGISTRY:-notficationsystem}/subscribing.signalrhub:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Subscribing/Subscribing.SignalrHub/Dockerfile
+    depends_on:
+      - webmvc
+      - identity-api
+      - sqldata
+      - rabbitmq
+
+  webstatus:
+    image: ${REGISTRY:-notficationsystem}/webstatus:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebStatus/Dockerfile
+
+
+
+volumes:
+  notifications-sqldata:
+    external: false
+  notifications-nosqldata:
+    external: false

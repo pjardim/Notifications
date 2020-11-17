@@ -1,0 +1,184 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Inbox";
+}
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-content mailbox-content">
+                    <div class="file-manager">
+                        <a class="btn btn-block btn-primary compose-mail" href="@Url.Action("ComposeEmail", "Mailbox")">Compose Mail</a>
+                        <div class="space-25"></div>
+                        <h5>Folders</h5>
+                        <ul class="folder-list m-b-md" style="padding: 0">
+                            <li><a href="@Url.Action("Inbox", "Mailbox")"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning float-right"></span> </a></li>
+                            <li><a href="@Url.Action("SentEmails", "Mailbox")"> <i class="fa fa-envelope-o"></i> Sent</a></li>
+                            <li><a href="@Url.Action("Trash", "Mailbox")"> <i class="fa fa-trash-o"></i> Trash</a></li>
+                        </ul>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 animated fadeInRight">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" />
+        <link rel="stylesheet" href="~/lib/iCheck/custom.css" />
+        <link rel="stylesheet" href="~/lib/summernote/summernote-bs4.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2-bootstrap4.min.css" />
+    </environment>
+
+    <style>
+        .fa-thumbs-o-up {
+            color: green
+        }
+
+        .fa-exclamation {
+            color: red;
+        }
+    </style>
+
+}
+
+@section Scripts {
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="~/lib/iCheck/icheck.min.js"></script>
+        <script src="~/lib/summernote/summernote-bs4.js"></script>
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $(".subscriberSelect").select2({
+                theme: 'bootstrap4'
+            });
+
+            //Compose Email
+            $('#Body').summernote();
+
+        });
+
+        function refreshPage() {
+            location.reload();
+        }
+
+        function markSelectedMessagesAsRead() {
+
+            var selectedMessageIds = [];
+            $('.messageSelect:checkbox:checked').each(function () {
+                selectedMessageIds.push($(this).val());
+            });
+
+            $.ajax({
+                url: '/MailBox/MarkAsRead',
+                data: { selectedMessageIds },
+                method: 'POST',
+                dataType: "json",
+            })
+                .done(function (data) {
+                    if (data.result === true) {
+                        refreshPage();
+
+                    } else {
+                        errorMsg(data.responseText);
+                    }
+
+                })
+                .fail(function () {
+                    errorMsg("Failed to complete action");
+                });
+
+        };
+
+        function moveSelectedMessagesToTrash() {
+            swal({
+                title: "Are you sure?",
+                text: "Do you want move this messages to trash?!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, Delete it!",
+                closeOnConfirm: false
+            },
+                function () {
+
+                    var selectedMessageIds = [];
+                    $('.messageSelect:checkbox:checked').each(function () {
+                        selectedMessageIds.push($(this).val());
+                    });
+
+                    $.ajax({
+                        url: '/MailBox/MoveToTrash',
+                        data: { selectedMessageIds },
+                        method: 'POST',
+                        dataType: "json",
+                    })
+                        .done(function (data) {
+                            if (data.result === true) {
+                                refreshPage();
+                            } else {
+                                errorMsg(data.responseText);
+                            }
+
+                        })
+                        .fail(function () {
+                            errorMsg("Failed to complete action");
+                        });
+
+                });
+        };
+
+        function moveToInbox() {
+
+            var selectedMessageIds = [];
+            $('.messageSelect:checkbox:checked').each(function () {
+                selectedMessageIds.push($(this).val());
+            });
+
+            $.ajax({
+                url: '/MailBox/MoveToInbox',
+                data: { selectedMessageIds },
+                method: 'POST',
+                dataType: "json",
+            })
+                .done(function (data) {
+                    if (data.result === true) {
+                        refreshPage();
+
+                    } else {
+                        errorMsg(data.responseText);
+                    }
+
+                })
+                .fail(function () {
+                    errorMsg("Failed to complete action");
+                });
+
+        };
+
+        function errorMsg(msg) {
+            swal("Error!", msg, "error");
+        }
+    </script>
+
+}

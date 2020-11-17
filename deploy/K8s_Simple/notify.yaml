@@ -1,0 +1,1038 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: eventstore
+    name: eventstore
+  spec:
+    ports:
+    - name: "1112"
+      port: 1112
+      targetPort: 1112
+    - name: "1113"
+      port: 1113
+      targetPort: 1113
+    - name: "2112"
+      port: 2112
+      targetPort: 2112
+    - name: "2113"
+      port: 2113
+      targetPort: 2113
+    selector:
+      io.kompose.service: eventstore
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: identity-api
+    name: identity-api
+  spec:
+    ports:
+    - name: "5105"
+      port: 5105
+      targetPort: 80
+    selector:
+      io.kompose.service: identity-api
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: mongo-express
+    name: mongo-express
+  spec:
+    ports:
+    - name: "8081"
+      port: 8081
+      targetPort: 8081
+    selector:
+      io.kompose.service: mongo-express
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: nosqldata
+    name: nosqldata
+  spec:
+    ports:
+    - name: "27017"
+      port: 27017
+      targetPort: 27017
+    selector:
+      io.kompose.service: nosqldata
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notifying-api
+    name: notifying-api
+  spec:
+    ports:
+    - name: "5104"
+      port: 5104
+      targetPort: 80
+    - name: "9104"
+      port: 9104
+      targetPort: 81
+    selector:
+      io.kompose.service: notifying-api
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notifying-backgroundtasks
+    name: notifying-backgroundtasks
+  spec:
+    ports:
+    - name: "5111"
+      port: 5111
+      targetPort: 80
+    selector:
+      io.kompose.service: notifying-backgroundtasks
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: publishing-api
+    name: publishing-api
+  spec:
+    ports:
+    - name: "5103"
+      port: 5103
+      targetPort: 80
+    - name: "9103"
+      port: 9103
+      targetPort: 81
+    selector:
+      io.kompose.service: publishing-api
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: rabbitmq
+    name: rabbitmq
+  spec:
+    ports:
+    - name: "15672"
+      port: 15672
+      targetPort: 15672
+    - name: "5672"
+      port: 5672
+      targetPort: 5672
+    selector:
+      io.kompose.service: rabbitmq
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: seq
+    name: seq
+  spec:
+    ports:
+    - name: "5340"
+      port: 5340
+      targetPort: 80
+    selector:
+      io.kompose.service: seq
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: sqldata
+    name: sqldata
+  spec:
+    ports:
+    - name: "5433"
+      port: 5433
+      targetPort: 1433
+    selector:
+      io.kompose.service: sqldata
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: subscribing-signalrhub
+    name: subscribing-signalrhub
+  spec:
+    ports:
+    - name: "5112"
+      port: 5112
+      targetPort: 80
+    selector:
+      io.kompose.service: subscribing-signalrhub
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: webmvc
+    name: webmvc
+  spec:
+    ports:
+    - name: "5100"
+      port: 5100
+      targetPort: 80
+    selector:
+      io.kompose.service: webmvc
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: webstatus
+    name: webstatus
+  spec:
+    ports:
+    - name: "5107"
+      port: 5107
+      targetPort: 80
+    selector:
+      io.kompose.service: webstatus
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: eventstore
+    name: eventstore
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: eventstore
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: eventstore
+      spec:
+        containers:
+        - env:
+          - name: EVENTSTORE_CLUSTER_SIZE
+            value: "1"
+          - name: EVENTSTORE_EXT_HTTP_PORT
+            value: "2113"
+          - name: EVENTSTORE_EXT_TCP_PORT
+            value: "1113"
+          - name: EVENTSTORE_INT_HTTP_PORT
+            value: "2112"
+          - name: EVENTSTORE_INT_TCP_PORT
+            value: "1112"
+          image: eventstore/eventstore
+          imagePullPolicy: ""
+          name: eventstore
+          ports:
+          - containerPort: 1112
+          - containerPort: 1113
+          - containerPort: 2112
+          - containerPort: 2113
+          resources: {}
+          volumeMounts:
+          - mountPath: /var/opt/eventstore
+            name: notification-eventstore
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes:
+        - name: notification-eventstore
+          persistentVolumeClaim:
+            claimName: notification-eventstore
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notification-eventstore
+    name: notification-eventstore
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: identity-api
+    name: identity-api
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: identity-api
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: identity-api
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: ApplicationInsights__InstrumentationKey
+          - name: ConnectionString
+            value: Server=sqldata;Database=Notifications.IdentityDb;User Id=sa;Password=Pass@word
+          - name: MvcClient
+            value: http://:5100
+          - name: NotifyingApiClient
+            value: http://:5104
+          - name: OrchestratorType
+          - name: SignalrHubClient
+            value: http://:5112
+          - name: UseCustomizationData
+            value: "True"
+          image: notficationsregistry/identity.api:linux-latest
+          imagePullPolicy: ""
+          name: identity-api
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: mongo-express
+    name: mongo-express
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: mongo-express
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: mongo-express
+      spec:
+        containers:
+        - env:
+          - name: ME_CONFIG_BASICAUTH_PASSWORD
+            value: admin
+          - name: ME_CONFIG_BASICAUTH_USERNAME
+            value: admin
+          - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+            value: pass
+          - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+            value: admin
+          - name: ME_CONFIG_MONGODB_SERVER
+            value: nosqldata
+          image: mongo-express
+          imagePullPolicy: ""
+          name: mongo-express
+          ports:
+          - containerPort: 8081
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: nosqldata
+    name: nosqldata
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: nosqldata
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: nosqldata
+      spec:
+        containers:
+        - image: mongo
+          imagePullPolicy: ""
+          name: nosqldata
+          ports:
+          - containerPort: 27017
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notifying-api
+    name: notifying-api
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: notifying-api
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: notifying-api
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: EventBusConnection
+            value: rabbitmq
+          - name: EventBusPassword
+          - name: EventBusUserName
+          - name: EventBusVirtualHost
+          - name: EventStoreConnection
+            value: ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500;
+              VerboseLogging=true
+          - name: IdentityUrlExternal
+            value: http://:5105
+          - name: MongoConnectionString
+            value: mongodb://nosqldata
+          - name: MongoDatabase
+            value: NotificationsDB
+          - name: PATH_BASE
+            value: /notifying-api
+          - name: PORT
+            value: "80"
+          - name: SubscriberConnectionString
+            value: Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true
+          - name: SubscribingUrl
+            value: http://webmvc
+          - name: identityUrl
+            value: http://identity-api
+          image: notficationsregistry/notifying-api:linux-latest
+          imagePullPolicy: ""
+          name: notifying-api
+          ports:
+          - containerPort: 80
+          - containerPort: 81
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notifying-backgroundtasks
+    name: notifying-backgroundtasks
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: notifying-backgroundtasks
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: notifying-backgroundtasks
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: CheckUpdateTime
+            value: "30000"
+          - name: DelaySendMessageTime
+            value: "30"
+          - name: EventBusConnection
+            value: rabbitmq
+          - name: EventBusPassword
+          - name: EventBusUserName
+          - name: EventBusVirtualHost
+          - name: MongoConnectionString
+            value: mongodb://nosqldata
+          - name: MongoDatabase
+            value: NotificationsDB
+          - name: Serilog__MinimumLevel__Override__BuildingBlocks.EventBusRabbitMQ
+            value: Verbose
+          - name: SubscriberConnectionString
+            value: Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word
+          - name: UseCustomizationData
+            value: "True"
+          image: notficationsregistry/notifying-backgroundtasks:linux-latest
+          imagePullPolicy: ""
+          name: notifying-backgroundtasks
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: publishing-api
+    name: publishing-api
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: publishing-api
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: publishing-api
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: AzureServiceBusEnabled
+            value: "False"
+          - name: ConnectionString
+            value: Server=sqldata;Database=Notifications.NotificationDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true
+          - name: EventBusConnection
+            value: rabbitmq
+          - name: EventBusPassword
+          - name: EventBusUserName
+          - name: EventBusVirtualHost
+          - name: EventStoreConnection
+            value: ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500;
+              VerboseLogging=true
+          - name: PATH_BASE
+            value: /publishing-api
+          - name: PORT
+            value: "80"
+          - name: SubscriberConnectionString
+            value: Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word;MultipleActiveResultSets=true
+          image: notficationsregistry/publishing-api:linux-latest
+          imagePullPolicy: ""
+          name: publishing-api
+          ports:
+          - containerPort: 80
+          - containerPort: 81
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: rabbitmq
+    name: rabbitmq
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: rabbitmq
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: rabbitmq
+      spec:
+        containers:
+        - image: rabbitmq:3-management-alpine
+          imagePullPolicy: ""
+          name: rabbitmq
+          ports:
+          - containerPort: 15672
+          - containerPort: 5672
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: seq
+    name: seq
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: seq
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: seq
+      spec:
+        containers:
+        - env:
+          - name: ACCEPT_EULA
+            value: Y
+          image: datalust/seq:latest
+          imagePullPolicy: ""
+          name: seq
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: smtpserver
+    name: smtpserver
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: smtpserver
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: smtpserver
+      spec:
+        containers:
+        - image: jsakamoto/smtpserver-for-e2etest:beta3
+          imagePullPolicy: ""
+          name: smtpserver
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: sqldata
+    name: sqldata
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: sqldata
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: sqldata
+      spec:
+        containers:
+        - env:
+          - name: ACCEPT_EULA
+            value: Y
+          - name: SA_PASSWORD
+            value: Pass@word
+          image: mcr.microsoft.com/mssql/server:2017-latest
+          imagePullPolicy: ""
+          name: sqldata
+          ports:
+          - containerPort: 1433
+          resources: {}
+          volumeMounts:
+          - mountPath: /var/opt/mssql
+            name: notification-sqldata
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes:
+        - name: notification-sqldata
+          persistentVolumeClaim:
+            claimName: notification-sqldata
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: notification-sqldata
+    name: notification-sqldata
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: subscribing-signalrhub
+    name: subscribing-signalrhub
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: subscribing-signalrhub
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: subscribing-signalrhub
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: EventBusConnection
+            value: rabbitmq
+          - name: EventBusPassword
+          - name: EventBusUserName
+          - name: EventBusVirtualHost
+          - name: IdentityUrl
+            value: http://:5105
+          - name: SubscribingUrl
+            value: http://:5100
+          image: notficationsregistry/subscribing.signalrhub:linux-latest
+          imagePullPolicy: ""
+          name: subscribing-signalrhub
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: webmvc
+    name: webmvc
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: webmvc
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: webmvc
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: ConnectionString
+            value: Server=sqldata;Database=Notifications.SubscriberDB;User Id=sa;Password=Pass@word
+          - name: EventBusConnection
+            value: rabbitmq
+          - name: EventBusPassword
+          - name: EventBusUserName
+          - name: EventBusVirtualHost
+          - name: EventStoreConnection
+            value: ConnectTo=tcp://admin:changeit@eventstore:1113; HeartBeatTimeout=500;
+              VerboseLogging=true
+          - name: IdentityUrl
+            value: http://:5105
+          - name: IdentityUrlHC
+            value: http://identity-api/hc
+          - name: NotifyingURL
+            value: http://notifying-api
+          - name: SignalrHubUrl
+            value: http://:5112
+          image: notficationsregistry/webmvc:linux-latest
+          imagePullPolicy: ""
+          name: webmvc
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+        convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: webstatus
+    name: webstatus
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        io.kompose.service: webstatus
+    strategy: {}
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
+            convert -f docker-compose.yml -f docker-compose.override.yml -o notify.yaml
+          kompose.version: 1.21.0 (992df58d8)
+        creationTimestamp: null
+        labels:
+          io.kompose.service: webstatus
+      spec:
+        containers:
+        - env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://0.0.0.0:80
+          - name: HealthChecksUI__HealthChecks__0__Name
+            value: WebMVC HTTP Check
+          - name: HealthChecksUI__HealthChecks__0__Uri
+            value: http://webmvc/hc
+          - name: HealthChecksUI__HealthChecks__1__Name
+            value: Identity HTTP Check
+          - name: HealthChecksUI__HealthChecks__1__Uri
+            value: http://identity-api/hc
+          - name: HealthChecksUI__HealthChecks__2__Name
+            value: Notifying HTTP Check
+          - name: HealthChecksUI__HealthChecks__2__Uri
+            value: http://notifying-api/hc
+          - name: HealthChecksUI__HealthChecks__3__Name
+            value: Notifying HTTP Background Check
+          - name: HealthChecksUI__HealthChecks__3__Uri
+            value: http://notifying-backgroundtasks/hc
+          image: notficationsregistry/webstatus:linux-latest
+          imagePullPolicy: ""
+          name: webstatus
+          ports:
+          - containerPort: 80
+          resources: {}
+        restartPolicy: Always
+        serviceAccountName: ""
+        volumes: null
+  status: {}
+kind: List
+metadata: {}
+

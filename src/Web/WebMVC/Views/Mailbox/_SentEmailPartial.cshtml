@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Mailbox/_MailLayout.cshtml";
+}
+
+@model IEnumerable<Subscribing.Application.Queries.ViewModels.MailBoxItemViewModel>
+
+<div class="mail-box-header">
+    <form method="get" action="#" class="float-right mail-search">
+        <div class="input-group">
+            <input type="text" class="form-control form-control-sm" name="search" placeholder="Search email">
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
+    <h2>
+        Trash (@Model.Count())
+    </h2>
+    <div class="mail-tools tooltip-demo m-t-md">
+        <div class="btn-group float-right">
+            <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
+            <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
+        </div>
+        <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox" onclick="refreshPage()"><i class="fa fa-refresh"></i> Refresh</button>
+    </div>
+</div>
+
+<div class="mail-box">
+    <table class="table table-hover table-mail">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="read">
+                    <td class="check-mail">
+                        <input type="checkbox" value="@item.MessageId" class="i-checks messageSelect">
+                    </td>
+                    <td class="mail-contact"><a href="@Url.Action("EmailView", "Mailbox", new { messageId = @item.MessageId })">@String.Join(",", item.Senders.Select(x => x.Name))</a></td>
+                    <td class="mail-subject"><a href="@Url.Action("EmailView", "Mailbox", new { messageId = @item.MessageId })">@item.Subject</a></td>
+                    @if (item.RequireAcknowledged)
+                    {
+                        <td class=""><i class="@(@item.Acknowledged ? "fa fa-thumbs-o-up" : "fa fa-exclamation")"> </i></td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td class="text-right mail-date">@item.CreatedDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Notification App</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/css/animate.css" />
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+        <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/css/animate.css" />
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+        <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    </environment>
+</head>
+<body>
+
+    <!-- Skin configuration box -->
+    <!-- <partial name="_SkinConfig" /> -->
+    <!-- Wrapper-->
+    <div id="wrapper" class="@Html.PageClass()">
+
+        <!-- Navigation -->
+        <partial name="_Navigation" />
+
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg @ViewBag.SpecialClass">
+
+            <!-- Top Navbar -->
+            <partial name="_TopNavbar" />
+
+            <!-- Main view  -->
+            @RenderBody()
+
+            <!-- Footer -->
+            <partial name="_Footer" />
+        </div>
+        <!-- End page wrapper-->
+
+
+    </div>
+    <!-- End wrapper-->
+
+    @RenderSection("toast", required: false)
+
+    <environment names="Development">
+
+        <script>
+            window.paceOptions = { ajax: { ignoreURLs: ['signalr', '__browserLink', 'browserLinkSignalR'], trackWebSockets: false } }
+        </script>
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/Popper/popper.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/metisMenu/dist/jquery.metisMenu.js"></script>
+        <script src="~/lib/slimScroll/jquery.slimscroll.js"></script>
+        <script src="~/lib/pace/pace.js"></script>
+        <script src="~/js/script.js" asp-append-version="true"></script>
+
+        <script src="~/lib/toastr/toastr.min.js"></script>
+        <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+        <!-- Only for demo purpose -->
+        <script src="~/js/skin.config.js"></script>
+
+
+    </environment>
+    <environment names="Staging,Production">
+        <script>
+            window.paceOptions = { ajax: { ignoreURLs: ['signalr', '__browserLink', 'browserLinkSignalR'], trackWebSockets: false } }
+        </script>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/Popper/popper.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/metisMenu/dist/jquery.metisMenu.js"></script>
+        <script src="~/lib/pace/pace.min.js"></script>
+        <script src="~/lib/slimScroll/jquery.slimscroll.min.js"></script>
+        <script src="~/js/script.js" asp-append-version="true"></script>
+
+        <script src="~/lib/toastr/toastr.min.js"></script>
+        <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+
+    @using Microsoft.AspNetCore.Authentication;
+    @using Microsoft.Extensions.Options
+    @inject IOptions<AppSettings> settings
+
+    <script type="text/javascript">
+        if ('@User.Identity.IsAuthenticated' === 'True') {
+            var timerId;
+
+            stablishConnection((conn) => registerNotificationHandlers(conn));
+        }
+
+        function stablishConnection(cb) {
+            let connection = new signalR.HubConnectionBuilder()
+              .withUrl('@settings.Value.SignalrHubUrl/hub/notificationhub', {
+                    accessTokenFactory: () => {
+                        return "Authorization", getToken();
+                    }
+                })
+                .withAutomaticReconnect()
+                .build();
+
+            connection.start().then(function () {
+                console.log('User Registered to Signalr Hub');
+                cb(connection);
+            });
+        }
+
+        function registerNotificationHandlers(connection) {
+            connection.on("MailRecieved", (message) => {
+                swal("New Message Recieved!", 'From' + message.from, 'success');
+            });
+        }
+
+        function getToken() {
+            return '@Context.GetTokenAsync("access_token").Result';
+        }
+
+        function refreshOrderList() {
+            clearTimeout(timerId);
+            timerId = setTimeout(function () {
+                window.location.reload();
+            }, 1000);
+        }
+    </script>
+
+    @using WebMVC
+    @using WebMVC.Resources
+    @if (TempData.ContainsKey("Toastr"))
+    {
+
+        var toastr = TempData.DeserializeAlerts("Toastr");
+
+        void ShowToastMessages(Toastr toastr)
+        {
+
+            if (toastr != null)
+
+            {
+                <script>
+
+      $(document).ready(function () {
+
+        toastr.options.closeButton = '@toastr.ShowCloseButton';
+
+        toastr.options.newestOnTop = '@toastr.ShowNewestOnTop';
+
+        @foreach (var message in toastr.ToastMessages)
+        {
+            var toastTypeValue = message.ToastType.ToString("F").ToLower();
+
+          @*@: var optionsOverride = { /* Add message specific options here */ };
+
+            if (message.IsSticky)
+
+            {
+
+            @:optionsOverride.timeOut = 0;
+
+            @:optionsOverride.extendedTimeout = 0;
+
+            }*@
+
+          @:toastr['@toastTypeValue']('@message.Message', '@message.Title'); // , optionsOverride
+
+        }
+
+      });
+                </script>
+
+            }
+
+        }
+
+        ShowToastMessages(toastr);
+
+    }
+</body>
+</html>

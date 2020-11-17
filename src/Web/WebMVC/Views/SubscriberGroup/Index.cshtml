@@ -1,0 +1,112 @@
+﻿@model SubscriberGroupSettingsViewModel
+
+@{
+    ViewData["Title"] = "Subscribers";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "SubscriberGroup", Text = "Subscriber Groups" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Subscribers</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Subscriber Groups</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Group Select</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" id="subscriberForm" role="form" asp-controller="SubscriberGroup" asp-action="Index">
+
+                        <div class="form-group row">
+                            <label asp-for="Subscriber" class="col-lg-2 col-form-label">Subscriber</label>
+                            <div class="col-lg-5">
+                                <select asp-for="@Model.SubscriberPartyId" onchange="changeSubscriber()" asp-items="@Model.SubscribersList" class="form-control subscriberSelect"></select>
+                                <span asp-validation-for="SubscriberPartyId" class="text-danger" />
+                            </div>
+                        </div>
+                    </form>
+                    <form method="post" role="form" asp-controller="SubscriberGroup" asp-action="Save">
+
+                        @Html.HiddenFor(model => Model.SubscriberPartyId)
+                        <p>
+                            Add group to subscriber
+                        </p>
+                        <select asp-for="@Model.SelectedGroups" asp-items="@Model.SubscriberGroups" placeholder="" class="form-control dualSelect"></select>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <a class="btn btn-white btn-sm" asp-controller="Subscriber" asp-action="Index">Cancel</a>
+                                <button class="btn btn-primary btn-sm" type="submit" onclick="">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr-line-dashed"></div>
+
+@section Styles {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2-bootstrap4.min.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2-bootstrap4.min.css" />
+    </environment>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <environment names="Development">
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
+        <script src="~/lib/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
+        <script src="~/lib/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.dualSelect').bootstrapDualListbox({
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false,
+            });
+
+            $(".subscriberSelect").select2({
+                theme: 'bootstrap4',
+                allowClear: false
+            });
+
+        });
+
+        function changeSubscriber() {
+            $('#subscriberForm').submit();
+        };
+    </script>
+}

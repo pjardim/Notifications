@@ -1,0 +1,63 @@
+﻿@model Subscribing.Application.Queries.ViewModels.SubscriberViewModel
+
+@{
+    ViewData["Title"] = "Subscriber Details";
+    var headerList = new List<Header>() {
+        new Header() { Controller = "Home", Text = "Back to Home" },
+        new Header() { Text = " / " },
+        new Header() { Controller = "Subscriber", Text = "Subscriber" } };
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2> Subscriber Details</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Settings</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Subscriber Details</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Subscriber Details</h5>
+                </div>
+                <div class="ibox-content">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SubscriberPartyId)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.SubscriberPartyId)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Name)
+                        </dd>
+
+                    </dl>
+                    <a class="btn btn-primary" asp-controller="Subscriber" asp-action="Edit" asp-route-id="@Model.SubscriberPartyId">Edit</a>
+                    <a class="btn btn-white" asp-controller="Subscriber" asp-action="Index">Back To List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
